@@ -20,7 +20,36 @@ class ImageScene : Scene() {
     override suspend fun SContainer.sceneMain() {
 
         val bitmap = resourcesVfs["korge.png"].readBitmap();
-        val image = image(bitmap);
+        // x, y always seem to start from the top left of whatever you are placing. Probably a way to change.
+        val image = image(bitmap).scale(.25).apply {
+            // rotationDegrees = 50.0
+            rotation = (50.0).degrees
+            // I feel like there's a lot of changes between versions of this. I'm assuming a
+            // relatively young library.
+        };
+
+        // Sanity check, can we skip the apply / scale functions?
+        val image2 = image(bitmap) {
+            x = 512.0 / 2;
+            y = 512.0 / 2;
+            scale = 0.25;
+            rotation = (50.0).degrees;
+            // I'm quickly working out JS is annoying for Kotlin, I'm auto treating these as
+            // objects and constantly adding comma instead of semi colons.
+            addUpdater {
+                //Okay, yeah so add updater is how you are supposed to do stuff, I really need to
+                // figure out how to change the reference point so I can centre it and rotate around
+                // the centre. I assume this will be a thing.
+                rotation += (1.0).degrees;
+
+                // Can we replace this with a function call?
+            }
+
+        }
+        // This works, I think what is happening here is you can define in a class an extension
+        // function in Kotlin. It can then pass in various properties including a this so anything
+        // after that is treated as a codeblock. The bracket / braces notation is confusing with the
+        // functions but that can be treated as a problem for future me.
 
     }
 
