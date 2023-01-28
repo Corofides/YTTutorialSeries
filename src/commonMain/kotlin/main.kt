@@ -12,7 +12,37 @@ import com.soywiz.korma.interpolation.*
 suspend fun main() = Korge(width = 512, height = 512, bgcolor = Colors["#2b2b2b"]) {
 	val sceneContainer = sceneContainer()
 
-	sceneContainer.changeTo({ ImageScene() })
+	sceneContainer.changeTo({ SpriteScene() })
+}
+
+class SpriteScene : Scene() {
+
+    override suspend fun SContainer.sceneMain() {
+
+        val spriteMap = resourcesVfs["adventurer_tilesheet.png"].readBitmap();
+
+        val walkingAnimation = SpriteAnimation(
+            spriteMap = spriteMap,
+            spriteWidth = 80,
+            spriteHeight = 110,
+            marginTop = 0,
+            marginLeft = 0,
+            columns = 9,
+            rows = 3,
+            offsetBetweenColumns = 0,
+            offsetBetweenRows = 0,
+        )
+
+        val sprite = sprite(walkingAnimation);
+
+        //Specify the times played, or single time
+        sprite.playAnimation(times = 2);
+
+        //Loop the animation indefinitely.
+        sprite.playAnimationLooped(spriteDisplayTime = 100.milliseconds, startFrame = 9);
+
+    }
+
 }
 
 class ImageScene : Scene() {
