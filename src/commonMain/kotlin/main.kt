@@ -36,8 +36,8 @@ class CollisionScene : Scene() {
         val circle = circle(20.0, Colors.RED);
         circle.addUpdater {
 
-            // There is something weird happening with the color property here and I'm not sure what it
-            // is
+            // There is something weird happening with the color property here and I'm not sure
+            // what it is
             //this.color = Colors.WHITE;
 
             // Fun little test to see how to do it in one step.
