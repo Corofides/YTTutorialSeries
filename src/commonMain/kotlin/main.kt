@@ -1,5 +1,6 @@
 import com.soywiz.klock.*
 import com.soywiz.korge.*
+import com.soywiz.korge.input.*
 import com.soywiz.korge.scene.*
 import com.soywiz.korge.tween.*
 import com.soywiz.korge.view.*
@@ -12,7 +13,54 @@ import com.soywiz.korma.interpolation.*
 suspend fun main() = Korge(width = 512, height = 512, bgcolor = Colors["#2b2b2b"]) {
 	val sceneContainer = sceneContainer()
 
-	sceneContainer.changeTo({ SpriteScene() })
+	sceneContainer.changeTo({ CollisionScene() })
+}
+
+class CollisionScene : Scene() {
+
+    override suspend fun SContainer.sceneMain() {
+
+        /*val rect = solidRect(50, 50, Colors.GOLD) {
+            x = 512.0 / 2 - 25;
+            y = 512.0 / 2 - 25
+        };*/
+
+        val rectList = listOf(solidRect(50, 50, Colors.GOLD) {
+            x = 512.0 / 2 - 50;
+            y = 512.0 / 2 - 25;
+        }, solidRect(50, 50, Colors.VIOLET) {
+            x = 512.0 / 2 + 25
+            y = 512.0 / 2 - 25
+        });
+
+        val circle = circle(20.0, Colors.RED);
+        circle.addUpdater {
+
+            // There is something weird happening with the color property here and I'm not sure what it
+            // is
+            //this.color = Colors.WHITE;
+
+            // Fun little test to see how to do it in one step.
+            this.pos = input.mouse - IPoint(radius, radius);
+
+            if (collidesWith(rectList)) {
+                this.color = Colors.BLUE;
+            } else {
+                this.color = Colors.RED;
+            }
+
+            // This is differenc from YT Video I assume they changed it.
+            //x = input.mouse.x - radius;
+            //y = input.mouse.y - radius;
+        }
+
+        /* circle.onCollision({it == rect}) {
+            // I may be red green colour blind but I'm 99% certain blue does not equal black?
+            //circle.color = Colors["#0000FF"];
+        } */
+
+    }
+
 }
 
 class SpriteScene : Scene() {
