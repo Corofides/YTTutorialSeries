@@ -17,19 +17,28 @@ suspend fun main() = Korge(width = 512, height = 512, bgcolor = Colors["#2b2b2b"
 
 class MyScene : Scene() {
 	override suspend fun SContainer.sceneMain() {
-		val minDegrees = (-16).degrees
-		val maxDegrees = (+16).degrees
 
-		val image = image(resourcesVfs["korge.png"].readBitmap()) {
-			rotation = maxDegrees
-			anchor(.5, .5)
-			scale(0.8)
-			position(256, 256)
-		}
+        // Create circle and add midpoint as the offcenter was annoying me.
+        val midpointY = (512.0 / 2) - 20;
+        val midpointX = (512.0 / 2) - 20;
 
-		while (true) {
-			image.tween(image::rotation[minDegrees], time = 1.seconds, easing = Easing.EASE_IN_OUT)
-			image.tween(image::rotation[maxDegrees], time = 1.seconds, easing = Easing.EASE_IN_OUT)
-		}
+        val circle = circle(20.0, Colors.GOLD).xy(midpointX, midpointY);
+
+        /* Todo: Investigate this syntax as I'm not sure what it's doing. I know I can
+                 update the properties of the object before but I'm not sure why this
+                 works or how. Kotlin issues.
+         */
+        // This updates the circle in the view? (scene?) directly
+        circle.addUpdater {
+            radius += 1.0;
+        }
+
+        // This updates the (I'm going to refer to this as the scene unless contradicted later on) scene
+        // directly.
+        addUpdater {
+            circle.x -= 1.0;
+            circle.y -= 1.0;
+        }
+
 	}
 }
